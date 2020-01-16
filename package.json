@@ -5,11 +5,17 @@
   "author": "Daniel Barbosa de Lima <daniel@mandeumzap.com.br>",
   "license": "MIT",
   "scripts": {
-    "dev": "nodemon index.js"
+    "dev": "fuser -k 4001/tcp && nodemon index.js"
   },
   "dependencies": {
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "nodemon": "^2.0.2"
+    "morgan": "^1.9.1",
+    "nodemon": "^2.0.2",
+    "pg": "^7.17.1",
+    "pg-hstore": "^2.3.3",
+    "sequelize": "^5.21.3",
+    "sequelize-cli": "^5.5.1",
+    "socket.io": "^2.3.0"
   }
 }

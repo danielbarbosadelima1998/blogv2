@@ -12,7 +12,7 @@ class AuthorsController extends BaseController {
     routes() {
         const route = super.routes();
 
-        route.post('/authors/login', this.login);
+        route.post('/authors/login',this.login);
 
         return route;
     }

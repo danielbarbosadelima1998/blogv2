@@ -17,7 +17,8 @@ class BaseController {
             });
         } catch (error) {
             return res.status(500).json({
-                error, request: {
+                error,
+                request: {
                     type: "GET"
                 }
             });
@@ -26,7 +27,8 @@ class BaseController {
 
     async store(req, res) {
         try {
-            const response = await this.model.create(req.body);
+            const response = await this.model.create({ ...req.body });
+            req.io.emit('create.author', response)
             return res.status(200).json({
                 response,
                 request: {
@@ -63,9 +65,18 @@ class BaseController {
 
     async destroy(req, res) {
         try {
-            const response = await this.model.destroy(req.params.id)
+            const Exists = await this.model.findByPk(req.params.id)
+            if (!Exists) {
+                return res.status(500).json({
+                    error: 'Entity dont exist',
+                    request: {
+                        type: "DELETE"
+                    }
+                })
+            }
+            await this.model.destroy({ where: { id: req.params.id } })
             return res.status(200).json({
-                response,
+                response: 'Deleted with success',
                 request: {
                     type: "DELETE"
                 }
@@ -104,8 +115,8 @@ class BaseController {
 
         route.get(this.path, this.index.bind(this))
         route.post(this.path, this.store.bind(this))
-        route.get(this.path, this.show.bind(this))
-        route.delete(this.path, this.destroy.bind(this))
+        route.get(`${this.path}/:id`, this.show.bind(this))
+        route.delete(`${this.path}/:id`, this.destroy.bind(this))
         route.put(this.path, this.update.bind(this))
 
         return route
